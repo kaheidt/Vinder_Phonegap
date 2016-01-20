@@ -1,21 +1,114 @@
 ﻿<!doctype html>
 <html>
 <head>
-    <title>Vinder POC</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Vinder</title>
+
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+	<link href="/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/css/animate.css" rel="stylesheet">
+	<style type="text/css">
+		body {
+			/*padding-top: 0;*/
+			padding-top: 75px;
+			height: 100%;
+			position: fixed;
+			top: 0;
+			width: 100%;
+			background-image: url(images/VinderLogo_NoGradient_light.png);
+			background-repeat: no-repeat;
+			-moz-background-position-x: 50%;
+			-o-background-position-x: 50%;
+			background-position-x: 50%;
+			-moz-background-position-y: -50%;
+			-o-background-position-y: -50%;
+			background-position-y: -50%;
+		}
+
+		#menu-btn {
+			/*margin: 26px 0 0;*/
+			margin: 5px;
+		}
+	</style>
+
+	<script src="/js/modernizr-2.8.3.js"></script>
+
 </head>
 <body>
-    <button id="silly">DO IT</button>
-    <button id="clear">Clear</button>
-    <div id="results"></div>
-    <script src="js/zepto.min.js"></script>
-    <script src="js/vinder.js"></script>
-    <script>
-	$('#silly').click(function(){
-		SILLY.DoIt($('#results'));
-	});
-	$('#clear').click(function(){
-		$('#results').html('');
-	});
-    </script>
+	<div class="container-fluid">
+		<!-- #region Top Icon and Menu -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<ul class="nav navbar-nav">
+					<li>
+						<button class="btn btn-default btn-lg" id="menu-btn" data-toggle="modal" data-target="#menuModal">
+							<span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+						</button>
+					</li>
+				</ul>
+			</div><!-- /.container-fluid -->
+		</nav>
+		<!--#endregion-->
+		<!-- #region results template-->
+		<div class="panel panel-info debugInfo" data-bind="visible: showDebug" style="display: none;">
+			<!-- Default panel contents -->
+			<div class="panel-heading">Debug Info</div>
+			<div class="panel-body">
+				<p class="deviceNotLoaded" data-bind="visible: !deviceLoaded()">
+					Waiting for device data to load...
+				</p>
+				<p class="deviceLoaded" data-bind="visible: deviceLoaded, html: locationError" style="display: none;">
+				</p>
+			</div>
+
+			<!-- List group -->
+			<ul class="list-group deviceDetails">
+				<li class="list-group-item uuid">
+					<strong>uuid: </strong><span data-bind="text: uuid"></span>
+				</li>
+				<li class="list-group-item" data-bind="visible: deviceLoaded">
+					<strong>latitude: </strong><span data-bind="text: latitude"></span>
+				</li>
+				<li class="list-group-item" data-bind="visible: deviceLoaded">
+					<strong>longitude: </strong><span data-bind="text: longitude"></span>
+				</li>
+			</ul>
+		</div>
+		<!--#endregion-->
+	</div>
+
+	<!--#region debugging info-->
+	<!--#endregion-->
+	<!-- #region menu Modal -->
+	<div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content text-center">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="menuModalLabel">User and Profile</h4>
+				</div>
+				<div class="modal-body">
+					Some content
+				</div>
+				<!--<div class="modal-footer" style="text-align: center;">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>-->
+			</div>
+		</div>
+	</div>
+	<!--#endregion-->
+
+	<script src="/js/jquery-2.2.0.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/respond.min.js"></script>
+	<script src="/js/knockout-3.4.0.js"></script>
+
+	<script src="/js/vinder.js"></script>
+	<script>
+
+	</script>
 </body>
+
 </html>
