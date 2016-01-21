@@ -147,10 +147,14 @@ var VINDER = (function (module) {
 				});
 			};
 
+
 			self.first_vehicle = ko.computed(function () {
 				var vehics = self.vehicle_displays();
 				if (vehics.length > 0) {
 					return vehics[0];
+				}
+				if (vehics.length <= 3) {
+					self.loadNextVehicleBatch();
 				}
 				return new _ko_vm_factories.vehicle_display(null);
 			}, this);
@@ -161,6 +165,38 @@ var VINDER = (function (module) {
 					self.loadNextVehicleBatch();
 				}
 			}, this);
+
+			self.actOnVehicle = function (isLike) {
+				isLike = !!isLike;
+				var firstVehicle = self.first_vehicle();
+				if (firstVehicle) {
+					var nextAnim = isLike ? "zoomOutRight" : "zoomOutLeft";
+					var doStuff = function () {
+						var url = "likes/?";
+						url += "uid=" + self.uuid();
+						url += "&distance=" + self.first_vehicle().Distance;
+						url += "&vin=" + self.first_vehicle().Vin;
+						url += "&like=" + isLike;
+
+						var ajax = module.doAjax(url, {}, true);
+						ajax.done(function (data) {
+							//hooray
+						}).fail(function (jqXHR, textStatus, errorThrown) {
+							console.log(textStatus, errorThrown);
+							//alert("textStatus: " + textStatus + "\nerrorThrown: " + errorThrown);
+						});
+						self.vehicle_displays.shift();
+						resultsRow.removeClass("animated " + nextAnim).addClass("animated bounceInDown");
+					}
+					var resultsRow = $('.results-row');
+					//resultsRow.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', doStuff);
+					
+					resultsRow.removeClass("animated bounceInDown").addClass("animated " + nextAnim);
+					setTimeout(doStuff, 1500);
+
+				}
+				return false;
+			}
 		}
 	};
 
