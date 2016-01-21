@@ -120,11 +120,14 @@ var VINDER = (function (module) {
 				};
 				var ajax = module.doAjax("vehicles/", reqData);
 				ajax.done(function (data) {
+					alert("data received:\n" + JSON.stringify(data));
 					if (data && $.isArray(data)) {
 						for (var i = 0, l= data.length; i < l; i++) {
 							self.vehicle_displays.push(new _ko_vm_factories.vehicle_display(data[i]));
 						}
 					}
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					alert("textStatus: " + textStatus + "\nerrorThrown: " + errorThrown);
 				});
 			};
 
@@ -136,7 +139,8 @@ var VINDER = (function (module) {
 				return new _ko_vm_factories.vehicle_display(null);
 			}, this);
 
-			self.loadComplete = ko.computed(function() {
+			self.loadComplete = ko.computed(function () {
+				alert("loadComplete: " + self.deviceLoaded());
 				if (self.deviceLoaded()) {
 					self.loadNextVehicleBatch();
 				}
