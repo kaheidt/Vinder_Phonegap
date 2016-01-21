@@ -127,7 +127,7 @@ var VINDER = (function (module) {
 				};
 
 				var url = "vehicles/?";
-				url += "&uid=" + reqData.uid;
+				url += "uid=" + reqData.uid;
 				url += "&latitude=" + reqData.latitude;
 				url += "&longitude=" + reqData.longitude;
 				for (var j = 0, k=reqData.vins.length; j < k; j++) {
