@@ -15,7 +15,7 @@ var VINDER = (function (module) {
 	};
 
 	function getUUID() {
-		if (Modernizr.localStorage) {
+		if (Modernizr.localstorage) {
 			//var _id = localStorage['uuid'] || generateUUID();
 			var _id = localStorage.uuid || generateUUID();
 			//localStorage['uuid'] = _id;
