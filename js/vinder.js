@@ -60,7 +60,7 @@ var VINDER = (function (module) {
 	
 	//#region Device Ready
 	var onDeviceReady = function () {
-
+		console.log("device ready", window.device || device || "no device object in global");
 		var showPosition = function (position){
 			if (position && position.coords) {
 				_koVM.latitude = position.coords.latitude;
@@ -109,7 +109,8 @@ var VINDER = (function (module) {
 		}
 	};
 
-	$(document).on('deviceready', onDeviceReady);
+	//$(document).on('deviceready', onDeviceReady);
+	document.addEventListener('deviceready', onDeviceReady, false);
 	//#endregion
 
 
