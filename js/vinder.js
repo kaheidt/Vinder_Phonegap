@@ -134,7 +134,7 @@ var VINDER = (function (module) {
 					url += "&vins=" + reqData.vins[j];
 				}
 
-				var ajax = module.doAjax("vehicles/", {}, true);
+				var ajax = module.doAjax(url, {}, true);
 				ajax.done(function (data) {
 					alert("data received:\n" + JSON.stringify(data));
 					if (data && $.isArray(data)) {
