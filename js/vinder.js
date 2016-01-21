@@ -27,6 +27,19 @@ var VINDER = (function (module) {
 
 	//#region Knockout Stuff
 	var _ko_vm_factories = {
+		koVM: function () {
+			var self = this;
+
+			self.showDebug = true;	//set this to true if you want to see device info when it's loaded
+
+			self.deviceLoaded = ko.observable(false);
+			self.latitude = ko.observable();
+			self.longitude = ko.observable();
+			self.locationError = ko.observable();
+
+			self.uuid = ko.observable(_uuid);
+			self.vehicle_displays = ko.observableArray();
+		},
 		vehicle_display: function (data) {
 			var self = this;
 			data = data || {};
@@ -39,21 +52,9 @@ var VINDER = (function (module) {
 		}
 	};
 
-	var _koVM = function () {
-		var self = this;
-
-		self.showDebug = true;	//set this to true if you want to see device info when it's loaded
-
-		self.deviceLoaded = ko.observable(false);
-		self.latitude = ko.observable();
-		self.longitude = ko.observable();
-		self.locationError = ko.observable();
-
-		self.uuid = ko.observable(_uuid);
-		self.vehicle_displays = ko.observableArray();
-	};
-
+	var _koVM = new _ko_vm_factories.koVM();
 	ko.applyBindings(_koVM);
+
 
 	//#endregion
 
