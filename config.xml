@@ -7,6 +7,10 @@
     <author email="kevin.heidt@homenetauto.com" href="http://vinder.azurewebsites.net">
         Kevin Heidt
     </author>
+	<feature name="debug-server" required="true">
+		<param name="domain" value="http://10.224.214.106:8080"/>
+		<param name="key" value="hereIsAThingICanDo"/>
+	</feature>
     <!--
     <preference name="permissions" value="none" />
     <preference name="orientation" value="default" />
