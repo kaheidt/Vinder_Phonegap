@@ -4,9 +4,14 @@ var VINDER = (function (module) {
 	var _api_key = "43hawqdeqhhdxd4mssvjs39t";
 
 
-	module.doAjax = function (endpoint, rData) {
+	module.doAjax = function (endpoint, rData, appendKey) {
 		var reqData = rData || {};
-		reqData.api_key = _api_key;
+		if (appendKey) {
+			endpoint += (endpoint.indexOf("?") > -1 ? "&" : "?");
+			endpoint += "api_key=" + _api_key;
+		} else {
+			reqData.api_key = _api_key;
+		}
 		var url = _apiRoot + endpoint;
 		alert("ajax url: " + url + "\ndata: " + JSON.stringify(reqData));
 		return $.ajax({
@@ -120,7 +125,16 @@ var VINDER = (function (module) {
 					latitude: self.latitude(),
 					longitude: self.longitude()
 				};
-				var ajax = module.doAjax("vehicles/", reqData);
+
+				var url = "vehicles/?";
+				url += "&uid=" + reqData.uid;
+				url += "&latitude=" + reqData.latitude;
+				url += "&longitude=" + reqData.longitude;
+				for (var j = 0, k=reqData.vins.length; j < k; j++) {
+					url += "&vins=" + reqData.vins[j];
+				}
+
+				var ajax = module.doAjax("vehicles/", {}, true);
 				ajax.done(function (data) {
 					alert("data received:\n" + JSON.stringify(data));
 					if (data && $.isArray(data)) {
