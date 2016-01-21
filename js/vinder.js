@@ -27,6 +27,33 @@ var VINDER = (function (module) {
 		return generateUUID();
 	}
 
+	var _lastLatLon = {
+		getLastLatitude: function () {
+			if (Modernizr.localstorage) {
+				return localStorage.lastLatitude;
+			}
+			return null;
+		},
+		getLastLongitude: function () {
+			if (Modernizr.localstorage) {
+				return localStorage.lastLongitude;
+			}
+			return null;
+		},
+		setLastLatitude: function (val) {
+			if (Modernizr.localstorage) {
+				localStorage.lastLatitude = val;
+			}
+		},
+		setLastLongitude: function (val) {
+			if (Modernizr.localstorage) {
+				localStorage.lastLongitude = val;
+			}
+		}
+	};
+
+	
+
 	var _uuid = getUUID();
 
 	//#region Knockout Stuff
@@ -37,8 +64,8 @@ var VINDER = (function (module) {
 			self.showDebug = true;	//set this to true if you want to see device info when it's loaded
 
 			self.deviceLoaded = ko.observable(false);
-			self.latitude = ko.observable();
-			self.longitude = ko.observable();
+			self.latitude = ko.observable(_lastLatLon.getLastLatitude());
+			self.longitude = ko.observable(_lastLatLon.getLastLongitude());
 			self.locationError = ko.observable();
 
 			self.uuid = ko.observable(_uuid);
@@ -70,12 +97,16 @@ var VINDER = (function (module) {
 			console.log("showPosition", position);
 			if (position && position.coords) {
 				_koVM.latitude(position.coords.latitude);
+				_lastLatLon.setLastLatitude(position.coords.latitude);
 				_koVM.longitude(position.coords.longitude);
+				_lastLatLon.setLastLongitude(position.coords.longitude);
 			}
 			_koVM.deviceLoaded(true);
 		}
 
 		var showError = function (error) {
+			_koVM.latitude(null);
+			_koVM.longitude(null);
 			console.log("showError", error);
 			var errorTxt = "Error code: " + error.code + " ... ";
 			switch (error.code) {
@@ -99,12 +130,13 @@ var VINDER = (function (module) {
 		try {
 			console.log("navigator.geolocation", navigator.geolocation);
 			if (navigator.geolocation) {
-				var options = { timeout: 3000 };
+				var options = { timeout: 25000 };
 				navigator.geolocation.getCurrentPosition(showPosition, showError, options);
 			} else {
 				_koVM.locationError("Device does not support geolocation");
-				_koVM.deviceLoaded(true);
+				//_koVM.deviceLoaded(true);
 			}
+			_koVM.deviceLoaded(true);
 		}
 		catch (ex) {
 			console.log(ex);
