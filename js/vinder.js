@@ -7,8 +7,10 @@ var VINDER = (function (module) {
 	module.doAjax = function (endpoint, rData) {
 		var reqData = rData || {};
 		reqData.api_key = _api_key;
+		var url = _apiRoot + endpoint;
+		alert("ajax url: " + url + "\ndata: " + JSON.stringify(reqData));
 		return $.ajax({
-			url: _apiRoot + endpoint,
+			url: url,
 			data: reqData,
 			//data: JSON.stringify(reqData),
 			dataType: "json"
