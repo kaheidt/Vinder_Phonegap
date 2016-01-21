@@ -5,10 +5,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Vinder</title>
 
-	<link href="/css/bootstrap.min.css" rel="stylesheet">
-	<link href="/css/bootstrap-theme.min.css" rel="stylesheet">
-	<link href="/css/font-awesome.min.css" rel="stylesheet">
-	<link href="/css/animate.css" rel="stylesheet">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+	<link href="css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/animate.css" rel="stylesheet">
 	<style type="text/css">
 		body {
 			/*padding-top: 0;*/
@@ -19,12 +19,16 @@
 			width: 100%;
 			background-image: url(images/VinderLogo_NoGradient_light.png);
 			background-repeat: no-repeat;
-			-moz-background-position-x: 50%;
+			background-position: center;
+			background-attachment: fixed;
+			/*-moz-background-position-x: 50%;
 			-o-background-position-x: 50%;
 			background-position-x: 50%;
 			-moz-background-position-y: -50%;
 			-o-background-position-y: -50%;
-			background-position-y: -50%;
+			background-position-y: -50%;*/
+			-ms-background-size: contain;
+			background-size: contain;
 		}
 
 		#menu-btn {
@@ -33,7 +37,7 @@
 		}
 	</style>
 
-	<script src="/js/modernizr-2.8.3.js"></script>
+	<script src="js/modernizr-2.8.3.js"></script>
 
 </head>
 <body>
@@ -51,6 +55,7 @@
 			</div><!-- /.container-fluid -->
 		</nav>
 		<!--#endregion-->
+		<div id="windowError"></div>
 		<!-- #region results template-->
 		<div class="panel panel-info debugInfo" data-bind="visible: showDebug" style="display: none;">
 			<!-- Default panel contents -->
@@ -100,14 +105,26 @@
 	</div>
 	<!--#endregion-->
 
-	<script src="/js/jquery-2.2.0.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/respond.min.js"></script>
-	<script src="/js/knockout-3.4.0.js"></script>
+	<script src="js/jquery-2.2.0.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/respond.min.js"></script>
+	<script src="js/knockout-3.4.0.js"></script>
 
-	<script src="/js/vinder.js"></script>
+	<script src="js/vinder.js"></script>
 	<script>
+		function myErrorHandler(errorMsg, url, lineNumber) {
+			console.log(errorMsg);
+			var winErr = document.getElementById('windowError');
+			if (winErr) {
 
+				winErr.innerHTML = "Error occured: " + errorMsg + '<br />' +
+								'lineNumber: ' + lineNumber + '<br />' +
+								'url: ' + url + '<br />' +
+				'<hr />' + winErr.innerHTML;
+				//return false;
+			}
+		};
+		window.onerror = myErrorHandler;
 	</script>
 </body>
 
