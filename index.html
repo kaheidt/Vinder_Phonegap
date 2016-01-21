@@ -87,8 +87,8 @@
 			right: 6px;
 		}
 		.results-row{
-			margin-left: 46px;
-			margin-right: 46px;
+			margin-left: 1.5em;
+			margin-right: 1.5em;
 		}
 	</style>
 
@@ -114,7 +114,7 @@
 
 		<div class="thumb-holder thumb-holder-down">
 			<span class="btn btn-danger animated rubberBand infinite">
-				<i class="fa fa-thumbs-down fa-2x"></i>
+				<i class="fa fa-thumbs-down fa-1x"></i>
 			</span>
 		</div>
 
@@ -135,9 +135,11 @@
 				</div>
 				<div class="panel-body form-horizontal" data-bind="foreach: attributes">
 					<div class="row">
-						<label class="control-label col-xs-4 text-right" data-bind="text: key + ':'"></label>
-						<div class="col-xs-8">
-							<span class="form-control" data-bind="text: value"></span>
+						<div class="col-xs-5 text-right">
+							<strong data-bind="text: key + ':'"></strong>
+						</div>
+						<div class="col-xs-7 text-left">
+							<span class="form-control1" data-bind="text: value"></span>
 						</div>
 					</div>
 				</div>
@@ -149,7 +151,7 @@
 
 		<div class="thumb-holder thumb-holder-up">
 			<span class="btn btn-success animated rubberBand infinite">
-				<i class="fa fa-thumbs-up fa-2x"></i>
+				<i class="fa fa-thumbs-up fa-1x"></i>
 			</span>
 		</div>
 

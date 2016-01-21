@@ -13,7 +13,7 @@ var VINDER = (function (module) {
 			reqData.api_key = _api_key;
 		}
 		var url = _apiRoot + endpoint;
-		alert("ajax url: " + url + "\ndata: " + JSON.stringify(reqData));
+		//alert("ajax url: " + url + "\ndata: " + JSON.stringify(reqData));
 		return $.ajax({
 			url: url,
 			data: reqData,
@@ -136,14 +136,14 @@ var VINDER = (function (module) {
 
 				var ajax = module.doAjax(url, {}, true);
 				ajax.done(function (data) {
-					alert("data received:\n" + JSON.stringify(data));
+					//alert("data received:\n" + JSON.stringify(data));
 					if (data && $.isArray(data)) {
 						for (var i = 0, l= data.length; i < l; i++) {
 							self.vehicle_displays.push(new _ko_vm_factories.vehicle_display(data[i]));
 						}
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					alert("textStatus: " + textStatus + "\nerrorThrown: " + errorThrown);
+					//alert("textStatus: " + textStatus + "\nerrorThrown: " + errorThrown);
 				});
 			};
 
@@ -156,7 +156,7 @@ var VINDER = (function (module) {
 			}, this);
 
 			self.loadComplete = ko.computed(function () {
-				alert("loadComplete: " + self.deviceLoaded());
+				//alert("loadComplete: " + self.deviceLoaded());
 				if (self.deviceLoaded()) {
 					self.loadNextVehicleBatch();
 				}
