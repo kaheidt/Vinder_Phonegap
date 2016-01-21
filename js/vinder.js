@@ -16,10 +16,14 @@ var VINDER = (function (module) {
 
 	function getUUID() {
 		if (Modernizr.localStorage) {
-			var _id = localStorage['uuid'] || generateUUID();
-			localStorage['uuid'] = _id;
+			//var _id = localStorage['uuid'] || generateUUID();
+			var _id = localStorage.uuid || generateUUID();
+			//localStorage['uuid'] = _id;
+			localStorage.uuid = _id;
+			console.log("localStorage.uuid", localStorage.uuid);
 			return _id;
 		}
+		console.log("no localStorage");
 		return generateUUID();
 	}
 
@@ -62,7 +66,8 @@ var VINDER = (function (module) {
 	//#region Device Ready
 	var onDeviceReady = function () {
 		console.log("device ready", window.device || device || "no device object in global");
-		var showPosition = function (position){
+		var showPosition = function (position) {
+			console.log("showPosition", position);
 			if (position && position.coords) {
 				_koVM.latitude(position.coords.latitude);
 				_koVM.longitude(position.coords.longitude);
@@ -70,7 +75,8 @@ var VINDER = (function (module) {
 			_koVM.deviceLoaded(true);
 		}
 
-		var showError = function(error) {
+		var showError = function (error) {
+			console.log("showError", error);
 			var errorTxt = "Error code: " + error.code + " ... ";
 			switch (error.code) {
 				case error.PERMISSION_DENIED:
@@ -91,6 +97,7 @@ var VINDER = (function (module) {
 		}
 
 		try {
+			console.log("navigator.geolocation", navigator.geolocation);
 			if (navigator.geolocation) {
 				var options = {};
 				navigator.geolocation.getCurrentPosition(showPosition, showError, options);
