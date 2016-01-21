@@ -171,11 +171,14 @@ var VINDER = (function (module) {
 				var firstVehicle = self.first_vehicle();
 				if (firstVehicle) {
 					var nextAnim = isLike ? "zoomOutRight" : "zoomOutLeft";
+					var resultsRow = $('.results-row');
 					var doStuff = function () {
+						var vin = self.first_vehicle().Vin;
+
 						var url = "likes/?";
 						url += "uid=" + self.uuid();
 						url += "&distance=" + self.first_vehicle().Distance;
-						url += "&vin=" + self.first_vehicle().Vin;
+						url += "&vin=" + vin;
 						url += "&like=" + isLike;
 
 						var ajax = module.doAjax(url, {}, true);
@@ -185,10 +188,14 @@ var VINDER = (function (module) {
 							console.log(textStatus, errorThrown);
 							//alert("textStatus: " + textStatus + "\nerrorThrown: " + errorThrown);
 						});
+						self.prevVins.push(vin);
+						if (self.prevVins().length > 5) {
+							self.prevVins.shift();
+						}
 						self.vehicle_displays.shift();
+
 						resultsRow.removeClass("animated " + nextAnim).addClass("animated bounceInDown");
 					}
-					var resultsRow = $('.results-row');
 					//resultsRow.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', doStuff);
 					
 					resultsRow.removeClass("animated bounceInDown").addClass("animated " + nextAnim);
