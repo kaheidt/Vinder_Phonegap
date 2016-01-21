@@ -64,8 +64,8 @@ var VINDER = (function (module) {
 		console.log("device ready", window.device || device || "no device object in global");
 		var showPosition = function (position){
 			if (position && position.coords) {
-				_koVM.latitude = position.coords.latitude;
-				_koVM.longitude = position.coords.longitude;
+				_koVM.latitude(position.coords.latitude);
+				_koVM.longitude(position.coords.longitude);
 			}
 			_koVM.deviceLoaded(true);
 		}
