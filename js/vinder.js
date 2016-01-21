@@ -99,7 +99,7 @@ var VINDER = (function (module) {
 		try {
 			console.log("navigator.geolocation", navigator.geolocation);
 			if (navigator.geolocation) {
-				var options = {};
+				var options = { timeout: 3000 };
 				navigator.geolocation.getCurrentPosition(showPosition, showError, options);
 			} else {
 				_koVM.locationError("Device does not support geolocation");
