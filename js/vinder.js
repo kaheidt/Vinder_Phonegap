@@ -4,6 +4,19 @@ var VINDER = (function (module) {
 	var _api_key = "43hawqdeqhhdxd4mssvjs39t";
 
 
+	module.doAjax = function (endpoint, rData) {
+		var reqData = rData || {};
+		reqData.api_key = _api_key;
+		return $.ajax({
+			url: _apiRoot + endpoint,
+			data: reqData,
+			//data: JSON.stringify(reqData),
+			dataType: "json"
+			//contentType: 'application/json; charset=utf-8',
+			//type: "GET"
+		});
+	};
+
 	function generateUUID() {
 		var d = new Date().getTime();
 		var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -30,15 +43,15 @@ var VINDER = (function (module) {
 	var _lastLatLon = {
 		getLastLatitude: function () {
 			if (Modernizr.localstorage) {
-				return localStorage.lastLatitude;
+				return localStorage.lastLatitude || "";
 			}
-			return null;
+			return "";
 		},
 		getLastLongitude: function () {
 			if (Modernizr.localstorage) {
-				return localStorage.lastLongitude;
+				return localStorage.lastLongitude || "";
 			}
-			return null;
+			return "";
 		},
 		setLastLatitude: function (val) {
 			if (Modernizr.localstorage) {
@@ -58,10 +71,36 @@ var VINDER = (function (module) {
 
 	//#region Knockout Stuff
 	var _ko_vm_factories = {
+		vehicle_display: function (data) {
+			var self = this;
+			var isBlankObj = !data;
+			data = data || {};
+
+			self.isBlankObj = isBlankObj;
+			self.Vin = data.Vin;
+			self.Distance = data.Distance;
+			self.MasterImage = data.MasterImage;
+			self.Images = ko.observableArray(data.Images || []);
+			self.AttributesDictionary = ko.observable(data.AttributesDictionary);
+
+			self.attributes = ko.computed(function() {
+				var attsObj = self.AttributesDictionary();
+				var atts = [];
+				for (var prop in attsObj) {
+					if (attsObj.hasOwnProperty(prop)) {
+						atts.push({
+							key: prop,
+							value: attsObj[prop]
+						});
+					}
+				}
+				return atts;
+			}, this);
+		},
 		koVM: function () {
 			var self = this;
 
-			self.showDebug = true;	//set this to true if you want to see device info when it's loaded
+			self.showDebug = false;	//set this to true if you want to see device info when it's loaded
 
 			self.deviceLoaded = ko.observable(false);
 			self.latitude = ko.observable(_lastLatLon.getLastLatitude());
@@ -69,17 +108,39 @@ var VINDER = (function (module) {
 			self.locationError = ko.observable();
 
 			self.uuid = ko.observable(_uuid);
+			self.prevVins = ko.observableArray();
 			self.vehicle_displays = ko.observableArray();
-		},
-		vehicle_display: function (data) {
-			var self = this;
-			data = data || {};
 
-			self.Vin = data.Vin;
-			self.Distance = data.Distance;
-			self.MasterImage = data.MasterImage;
-			self.Images = ko.observableArray(data.Images || []);
-			self.AttributesDictionary = data.AttributesDictionary;
+			self.loadNextVehicleBatch = function() {
+				var reqData = {
+					vins: ko.toJS(self.prevVins),
+					uid: self.uuid(),
+					latitude: self.latitude(),
+					longitude: self.longitude()
+				};
+				var ajax = module.doAjax("vehicles/", reqData);
+				ajax.done(function (data) {
+					if (data && $.isArray(data)) {
+						for (var i = 0, l= data.length; i < l; i++) {
+							self.vehicle_displays.push(new _ko_vm_factories.vehicle_display(data[i]));
+						}
+					}
+				});
+			};
+
+			self.first_vehicle = ko.computed(function () {
+				var vehics = self.vehicle_displays();
+				if (vehics.length > 0) {
+					return vehics[0];
+				}
+				return new _ko_vm_factories.vehicle_display(null);
+			}, this);
+
+			self.loadComplete = ko.computed(function() {
+				if (self.deviceLoaded()) {
+					self.loadNextVehicleBatch();
+				}
+			}, this);
 		}
 	};
 
@@ -156,18 +217,6 @@ var VINDER = (function (module) {
 
 	module.koVM = _koVM;
 
-	module.doAjax = function (endpoint, rData) {
-		var reqData = rData || {};
-		reqData.api_key = _api_key;
-		return $.ajax({
-			url: _apiRoot + endpoint,
-			data: reqData,
-			//data: JSON.stringify(d),
-			dataType: "json"
-			//contentType: 'application/json; charset=utf-8',
-			//type: "GET"
-		});
-	};
 	
 
 	return module;

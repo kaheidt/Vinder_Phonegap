@@ -10,7 +10,7 @@
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/animate.css" rel="stylesheet">
 	<style type="text/css">
-		html, body {
+		html {
 			height: 100%;
 		}
 		body {
@@ -20,7 +20,8 @@
 			position: fixed;
 			top: 0;
 			width: 100%;*/
-			min-height: 100vw;
+			/*min-height: 100vw;*/
+			height: calc(100% - 72px);
 			background-image: url(images/VinderLogo_NoGradient_light.png);
 			background-repeat: no-repeat;
 			background-position: center;
@@ -44,6 +45,51 @@
 			/*margin: 26px 0 0;*/
 			margin: 5px;
 		}
+		.distance-div{
+			padding: 3px;
+			margin-bottom: 0;
+			-ms-border-radius: 0;
+			border-radius: 0;
+		}
+		.master-image-jumbotron{
+			padding: 10px;
+			margin-bottom: 0;
+			-ms-border-bottom-left-radius: 0 !important;
+			border-bottom-left-radius: 0 !important;
+			-ms-border-bottom-right-radius: 0 !important;
+			border-bottom-right-radius: 0 !important;
+		}
+		.results-panel {
+			-ms-border-top-left-radius: 0;
+			border-top-left-radius: 0;
+			-ms-border-top-right-radius: 0;
+			border-top-right-radius: 0;
+		}
+
+		.thumb-holder {
+			position: fixed;
+			top: 50%;
+		}
+		.thumb-holder>.animated {
+			-moz-animation-duration: 2.5s;
+			-o-animation-duration: 2.5s;
+			-webkit-animation-duration: 2.5s;
+			animation-duration: 2.5s;
+			/*-moz-animation-delay: 10s;
+			-o-animation-delay: 10s;
+			-webkit-animation-delay: 10s;
+			animation-delay: 10s;*/
+		}
+		.thumb-holder-down {
+			left: 6px;
+		}
+		.thumb-holder-up {
+			right: 6px;
+		}
+		.results-row{
+			margin-left: 46px;
+			margin-right: 46px;
+		}
 	</style>
 
 	<script src="js/modernizr-2.8.3.js"></script>
@@ -65,8 +111,51 @@
 			</div><!-- /.container-fluid -->
 		</nav>
 		<!--#endregion-->
-		<div id="windowError"></div>
+
+		<div class="thumb-holder thumb-holder-down">
+			<span class="btn btn-danger animated rubberBand infinite">
+				<i class="fa fa-thumbs-down fa-2x"></i>
+			</span>
+		</div>
+
 		<!-- #region results template-->
+		<div class="row text-center results-row" data-bind="visible: !first_vehicle().isBlankObj, with: first_vehicle()" style="display: none;">
+			<div class="jumbotron master-image-jumbotron text-center">
+				<img src="" data-bind="visible: MasterImage" alt="Vehicle Image" class="img-thumbnail pointer" data-toggle="modal" data-target="#carouselModel" style="max-width: 250px;">
+				<p class=" well well-sm" data-bind="visible: !MasterImage" style="display: none;">
+					No photo data available
+				</p>
+			</div>
+			<div class="alert alert-info distance-div" role="alert">
+				<span>Located <span class="badge" data-bind="text: Distance + ' miles'"></span> away</span>
+			</div>
+			<div class="panel panel-primary results-panel">
+				<div class="panel-heading">
+					<h4 class="panel-title">Details</h4>
+				</div>
+				<div class="panel-body form-horizontal" data-bind="foreach: attributes">
+					<div class="row">
+						<label class="control-label col-xs-4 text-right" data-bind="text: key + ':'"></label>
+						<div class="col-xs-8">
+							<span class="form-control" data-bind="text: value"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+		<!--#endregion-->
+
+		<div class="thumb-holder thumb-holder-up">
+			<span class="btn btn-success animated rubberBand infinite">
+				<i class="fa fa-thumbs-up fa-2x"></i>
+			</span>
+		</div>
+
+
+		<!-- #region debug stuff-->
+		<div id="windowError"></div>
 		<div class="panel panel-info debugInfo" data-bind="visible: showDebug" style="display: none;">
 			<!-- Default panel contents -->
 			<div class="panel-heading">Debug Info</div>
@@ -94,8 +183,6 @@
 		<!--#endregion-->
 	</div>
 
-	<!--#region debugging info-->
-	<!--#endregion-->
 	<!-- #region menu Modal -->
 	<div class="modal fade" id="menuModal" tabindex="-1" role="dialog" aria-labelledby="menuModalLabel">
 		<div class="modal-dialog" role="document">
@@ -113,9 +200,43 @@
 			</div>
 		</div>
 	</div>
+<!--#endregion-->
+
+	<!--#region carousel modal-->
+	<!-- Carousel modal snippet: http://bootsnipp.com/snippets/featured/carousel-inside-modal -->
+	<div id="carouselModel" class="modal fade bs-example-modal-lg text-center" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div id="carouselGenericExample" class="carousel slide1" data-ride="carousel" data-bind="with: first_vehicle">
+					<!-- Indicators -->
+					<!--<ol class="carousel-indicators" data-bind="foreach: Images">
+						<li data-target="#carouselGenericExample" data-bind="attr: {'data-slide-to':$index, 'class':$index == 0 ? 'active' : ''}"></li>
+					</ol>-->
+					<!-- Wrapper for slides -->
+					<div class="carousel-inner text-center" data-bind="foreach: Images">
+
+						<!--<div data-bind="attr: {'class': 'item ' + ($index == 0 ? 'active' : '')}">
+							<img class="img-responsive margin-auto" data-bind="attr: {src: $data, alt: 'Vehicle Image ' + $index}">
+						</div>-->
+						
+					</div>
+
+					
+					<!-- Controls -->
+					<a class="left carousel-control" href="#carouselGenericExample" role="button" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+					</a>
+					<a class="right carousel-control" href="#carouselGenericExample" role="button" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right"></span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!--#endregion-->
 
-	<script src="js/jquery-2.2.0.min.js"></script>
+<script src="js/jquery-2.2.0.min.js"></script>
+	<script src="js/jquery.mobile.custom.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/respond.min.js"></script>
 	<script src="js/knockout-3.4.0.js"></script>
